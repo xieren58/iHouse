@@ -1,77 +1,36 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
+import IHeader from "./components/header.vue"
+import IInput from "./components/input.vue"
 import House, { DICT } from "./utils/house"
 import store from "./utils/store"
+import { bus, form, house } from './utils/bus'
 
-interface IStoreItem {
-  key: string
-  val: any
-}
+// const history = ref<IStoreItem[]>([])
 
-const form = ref({
-    name: "美林",
-    originPrice: 0,
-    price: 512,
-    verifyPrice: 445,
-    area: 81.59,
-    isFive: true,
-    isOnly: true,
-    isRelocation: true,
-    isFirstRelocation: true,
-    age: 2006,
-    businessLoanRate: 0.043,
-    providentFundLoanRate: 0.031,
-  })
+// const getAll = () => {
+//   history.value = store.getAll()
+// }
 
-const history = ref<IStoreItem[]>([])
-
-const submit = () => {
-  const options = form.value
-  const house = new House(options)
-  const output = house.log()
-  document.getElementById("output")!.innerHTML = output
-  console.warn(form.value)
-  store.set(form.value.name, {
-    value: form.value,
-    display: formatKey()
-  })
-  getAll()
-}
-
-const formatKey = () => {
-  const data = form.value
-  const obj: Record<string, string> = {}
-  for (const key in data) {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
-      // @ts-ignore
-      obj[DICT[key]] = data[key]
-    }
-  }
-  return obj
-}
-
-const onHistoryClk = (item: IStoreItem) => {
-  console.log(item)
-  form.value = item.val.value
-  submit()
-}
-
-const getAll = () => {
-  history.value = store.getAll()
-}
-
-const clearAll = () => {
-  store.clear()
-  getAll()
-}
+// const clearAll = () => {
+//   store.clear()
+//   getAll()
+// }
 
 onMounted(() => {
-  getAll()
+  bus.emit("GET_HISTORY")
 })
 </script>
 
 <template>
   <div class="layout">
+    <i-header></i-header>
+    <main class="main">
+      <i-input></i-input>
+    </main>
+  </div>
+
+  <!-- <div class="layout">
     <h1>输入</h1>
     <div>
       <label>{{ DICT.name }}</label>
@@ -110,14 +69,25 @@ onMounted(() => {
         <td>{{ item.val.display }}</td>
       </tr>
     </table>
-  </div>
+  </div> -->
 </template>
 
 <style scoped lang="scss">
 .layout {
+  width: 750px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #444C60;
   text-align: left;
+  margin: 0 auto;
 }
-#output {
-  white-space: pre-wrap;
+
+.main {
+  flex: 1;
+  width: 750px;
+  background: #EDEDED;
+  box-shadow: 0px 0px 29px 0px rgba(0,0,0,0.3);
+  border-radius: 56px 56px 0 0;
 }
 </style>

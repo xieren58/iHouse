@@ -1,4 +1,4 @@
-interface IOptions {
+export interface IOptions {
   name?: string
   originPrice: number
   price: number
@@ -29,12 +29,12 @@ interface ILoan {
 }
 
 export default class House {
-  private VAT = 0 // 增值税
-  private PIT = 0 // 个人所得税
-  private DT = 0 // 契税
-  private downPayment = 0 // 首付
+  VAT = 0 // 增值税
+  PIT = 0 // 个人所得税
+  DT = 0 // 契税
+  downPayment = 0 // 首付
   // 公积金贷款
-  private providentFundLoan: ILoan = {
+  providentFundLoan: ILoan = {
     amount: 0,
     years: 0,
 
@@ -50,7 +50,7 @@ export default class House {
     },
   }
   // 商业贷款
-  private businessLoan: ILoan = {
+  businessLoan: ILoan = {
     amount: 0,
     years: 30,
     wayOfPI: {
@@ -64,17 +64,17 @@ export default class House {
       total: 0,
     },
   }
-  private originPrice: number
-  private price: number
-  private verifyPrice: number
-  private area: number
-  private isFive: boolean
-  private isOnly: boolean
-  private isRelocation: boolean
-  private isFirstRelocation: boolean
-  private age: number
-  private businessLoanRate: number
-  private providentFundLoanRate: number
+  originPrice: number
+  price: number
+  verifyPrice: number
+  area: number
+  isFive: boolean
+  isOnly: boolean
+  isRelocation: boolean
+  isFirstRelocation: boolean
+  age: number
+  businessLoanRate: number
+  providentFundLoanRate: number
 
   constructor(options: IOptions) {
     this.originPrice = options.originPrice
@@ -134,6 +134,26 @@ export default class House {
 
   private getDownPayment() {
     this.downPayment = House.f2N(this.price - this.verifyPrice * 0.65)
+  }
+
+  getTax() {
+    return House.f2S(this.VAT + this.DT + this.PIT)  
+  }
+
+  getTaxWithDownPayment() {
+    return House.f2S(this.VAT + this.DT + this.PIT + this.downPayment)  
+  }
+
+  getTotalLoan() {
+    const provident = this.providentFundLoan
+    const business = this.businessLoan
+    const { wayOfP: PP, wayOfPI: PPI } = provident
+    const { wayOfP: BP, wayOfPI: BPI } = business
+    return {
+      amount: House.f2S(provident.amount + business.amount),
+      wayOfPI: House.f2S(PPI.months[0] + BPI.months[0]),
+      wayOfP: House.f2S(PP.months[0] + BP.months[0])
+    } 
   }
 
   private getProvidentFundLoan() {
@@ -228,13 +248,13 @@ export default class House {
 export enum DICT {
   name = "名称",
   originPrice = "买入价",
-  price = "售价",
+  price = "挂牌价",
   verifyPrice = "核验价",
   area = "面积",
-  isFive = "是否满五",
-  isOnly = "是否唯一",
-  isRelocation = "是否动迁",
-  isFirstRelocation = "是否一手动迁",
+  isFive = "满五",
+  isOnly = "唯一",
+  isRelocation = "动迁",
+  isFirstRelocation = "一手",
   age = "房屋年份",
   businessLoanRate = "商贷利率",
   providentFundLoanRate = "公积金利率",
@@ -258,4 +278,4 @@ export const my = new House({
   providentFundLoanRate: 0,
   businessLoanRate: 0,
 })
-// my.log()
+
