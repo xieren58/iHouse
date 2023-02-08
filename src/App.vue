@@ -4,7 +4,7 @@ import IHeader from "./components/header.vue"
 import IInput from "./components/input.vue"
 import House, { DICT } from "./utils/house"
 import store from "./utils/store"
-import { bus, form, house } from './utils/bus'
+import { BUS_EVENT, bus, form, house } from './utils/bus'
 
 // const history = ref<IStoreItem[]>([])
 
@@ -18,7 +18,8 @@ import { bus, form, house } from './utils/bus'
 // }
 
 onMounted(() => {
-  bus.emit("GET_HISTORY")
+  bus.emit(BUS_EVENT.SUBMIT)
+  bus.emit(BUS_EVENT.HISTORY_UPDATE)
 })
 </script>
 

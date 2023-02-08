@@ -18,7 +18,7 @@
           房款{{ DICT.downPayment }} <span class="alert">{{ house?.downPayment || 0 }}</span> 万
         </p>
         <p class="board-sub icon-wrapper">月供&nbsp;<span class="icon-tip">i</span></p>
-        <p class="board-sub alert">等额本息 {{ house?.getTotalLoan().wayOfPI || 0 }}元</p>
+        <p class="board-sub">等额本息 <span class="alert">{{ house?.getTotalLoan().wayOfPI || 0 }}</span>元</p>
         <p class="board-sub">等额本金 {{ house?.getTotalLoan().wayOfP || 0 }}元</p>
       </div>
     </div>

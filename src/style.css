@@ -279,6 +279,10 @@ h6 {
   box-sizing: border-box;
 }
 
+input::placeholder {
+  color: #C4C4C4;
+}
+
 @media screen and (min-width: 1000px) {
   html {
     font-size: 200px !important;

@@ -5,8 +5,11 @@
     <div class="split"></div>
     <div class="tag" :class="{ active: form.isFive }" @click="onTagClk('isFive')">{{ DICT.isFive }}</div>
     <div class="tag" :class="{ active: form.isOnly }" @click="onTagClk('isOnly')">{{ DICT.isOnly }}</div>
-    <div class="tag" :class="{ active: form.isRelocation }" @click="onTagClk('isRelocation')">{{ DICT.isRelocation }}</div>
-    <div class="tag" :class="{ active: form.isFirstRelocation }" @click="onTagClk('isFirstRelocation')">{{ DICT.isFirstRelocation }}</div>
+    <div class="tag" :class="{ active: form.isRelocation }" @click="onTagClk('isRelocation')">{{ DICT.isRelocation }}
+    </div>
+    <div class="tag" :class="{ active: form.isFirstRelocation }" @click="onTagClk('isFirstRelocation')">{{
+      DICT.isFirstRelocation
+    }}</div>
   </div>
   <section class="numbers">
     <div class="row">
@@ -33,76 +36,57 @@
       </div>
     </div>
     <div class="row">
-      <div class="item">
+      <div class="item item-area">
         <label for="area">{{ DICT.area }}</label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="area" v-model="form.area" />
-          <div class="unit">平</div>
+          <div class="unit unit-l">m²</div>
         </div>
       </div>
       <div class="item">
         <label for="age">{{ DICT.age }}</label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="age" v-model="form.age" />
-          <div class="unit">年</div>
+          <div class="unit unit">年</div>
         </div>
       </div>
     </div>
 
     <div class="loan">
-      <div><span>商贷利率: </span><strong>{{House.f2S(form.businessLoanRate * 100)}}%｜标准利率</strong></div>
-      <div><span>公积金利率:</span><strong>{{House.f2S(form.providentFundLoanRate * 100)}}%｜基准利率</strong><span>（贷款年限</span><span class="alert">{{ house?.providentFundLoan.years || 0 }}</span><span>年）</span></div>
+      <div><span>商贷利率: </span><strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong></div>
+      <div><span>公积金利率:</span><strong>{{
+        House.f2S(form.providentFundLoanRate *
+          100)
+      }}%｜基准利率</strong><span>（贷款年限</span><span class="alert">{{
+  house?.providentFundLoan.years || 0
+}}</span><span>年）</span></div>
     </div>
   </section>
 
   <section class="mark">
-    <label for="name">备注：<span>（小区、楼层）</span></label>
-    <input placeholder="--" type="text" id="name" v-model="form.name" />
+    <label for="name">备注：</label>
+    <input placeholder="（小区、楼层）" type="text" id="name" v-model="form.name" />
   </section>
 
-  <div class="btn" @click="submit">计算</div>
+  <div class="btn" @click="onSubmit">计算</div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue"
+import { PropType, watch } from "vue"
 import House, { DICT, IOptions } from "../utils/house"
-import { form, house, bus } from "../utils/bus"
-import store from "../utils/store";
+import { form, house, bus, BUS_EVENT } from "../utils/bus"
 
-const submit = () => {
-  const options = form.value
-  house.value = new House(options)
-  console.warn(form.value)
-  store.set(form.value.name, {
-    value: form.value,
-    display: formatKey()
-  })
-  // getAll()
-  bus.emit("GET_HISTORY")
-}
+watch(form, () => onSubmit(), { deep: true })
 
-bus.on("submit", submit)
+const onSubmit = () => bus.emit(BUS_EVENT.SUBMIT)
 
-const onTagClk= (type: string) => {
+const onTagClk = (type: string) => {
   // @ts-ignore
   form.value[type] = !form.value[type]
-  bus.emit("submit")
-}
-
-const formatKey = () => {
-  const data = form.value
-  const obj: Record<string, string> = {}
-  for (const key in data) {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
-      // @ts-ignore
-      obj[DICT[key]] = data[key]
-    }
-  }
-  return obj
 }
 </script>
 <style lang="scss" scoped>
 .title {
-  padding: 68px 0 24px 68px;
+  padding: 55px 0 24px 68px;
   font-size: 26px;
   font-weight: 500;
   color: #939393;
@@ -149,7 +133,7 @@ const formatKey = () => {
   width: 686px;
   background: #e0e1e5;
   border-radius: 39px;
-  padding: 55px 35px 79px;
+  padding: 55px 35px 55px;
 }
 
 .row {
@@ -157,58 +141,87 @@ const formatKey = () => {
   justify-content: space-between;
   width: 100%;
   margin-bottom: 40px;
+
   .item {
     font-size: 0;
     margin-right: 27px;
     flex: 1;
+
+    &-area input {
+      padding-right: 70px !important;
+    }
+
     &:last-child {
       margin-right: 0;
     }
+
     label {
+      display: block;
       font-size: 26px;
       font-weight: 500;
       color: #939393;
       line-height: 52px;
+      padding: 0 0 13px 15px;
+
+      &:focus {
+        border-color: var(--color-primary);
+      }
     }
+
     .input-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      position: relative;
       width: 100%;
       height: 90px;
-      padding-right: 30px;
-      background: #ededed;
-      border: 2px solid #e5a56f;
-      border-radius: 24px;
+
       input {
-        flex: 1;
-        width: 100px;
+        width: 100%;
+        height: 100%;
         min-width: 0;
         font-size: 36px;
         font-weight: 600;
         color: #5c5c5c;
+        border-radius: 24px;
+        background: #ededed;
         line-height: 66px;
         text-align: center;
-        padding: 0 10px;
+        padding: 0 50px 0 10px;
+        border: 2px solid #BFBCB8;
+
+        &:focus {
+          border-color: var(--color-primary);
+        }
       }
+
       .unit {
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        width: 40px;
+        text-align: right;
+        margin-top: 4px;
+        transform: translateY(-50%);
         font-size: 21px;
         font-weight: 600;
         color: #5c5c5c;
-        line-height: 66px;
+        line-height: 1;
+
+        &-l {
+          font-size: 28px;
+        }
       }
     }
   }
 }
 
 .loan {
-  > div {
+  >div {
     span {
       font-size: 20px;
       font-weight: 500;
       color: #939393;
       line-height: 1;
     }
+
     &:first-child {
       margin-bottom: 6px;
     }
@@ -242,6 +255,7 @@ const formatKey = () => {
     font-size: 26px;
     font-weight: 500;
     color: #939393;
+
     span {
       font-size: 26px;
       font-weight: 500;
@@ -264,7 +278,7 @@ const formatKey = () => {
   justify-content: center;
   width: 436px;
   height: 112px;
-  margin: 0 auto;
+  margin: 0 auto 89px;
   background: var(--color-primary);
   border-radius: 56px;
   font-size: 48px;
