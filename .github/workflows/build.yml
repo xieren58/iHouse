@@ -29,13 +29,11 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-
-      - name: npm install, build
-        run: |
-          pnpm install
-          pnpm build
+          
       - uses: actions/checkout@v3
       - run: |
+          pnpm install
+          pnpm build
           date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
