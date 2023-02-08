@@ -86,7 +86,7 @@ const onTagClk = (type: string) => {
 </script>
 <style lang="scss" scoped>
 .title {
-  padding: 55px 0 24px 68px;
+  padding: 45px 0 24px 68px;
   font-size: 26px;
   font-weight: 500;
   color: #939393;
@@ -133,7 +133,7 @@ const onTagClk = (type: string) => {
   width: 686px;
   background: #e0e1e5;
   border-radius: 39px;
-  padding: 55px 35px 55px;
+  padding: 35px 35px;
 }
 
 .row {
@@ -160,7 +160,7 @@ const onTagClk = (type: string) => {
       font-size: 26px;
       font-weight: 500;
       color: #939393;
-      line-height: 52px;
+      line-height: 1;
       padding: 0 0 13px 15px;
 
       &:focus {
@@ -245,11 +245,10 @@ const onTagClk = (type: string) => {
   display: flex;
   align-items: center;
   padding: 0 35px;
-  margin: 32px auto 0;
+  margin: 32px auto;
   background: #e0e1e5;
   border-radius: 24px;
   line-height: 1;
-  margin-bottom: 50px;
 
   label {
     font-size: 26px;
@@ -276,14 +275,18 @@ const onTagClk = (type: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 436px;
-  height: 112px;
-  margin: 0 auto 89px;
+  width: 400px;
+  height: 80px;
+  margin: 0 auto 10px;
   background: var(--color-primary);
   border-radius: 56px;
-  font-size: 48px;
+  font-size: 38px;
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
+
+  &:active {
+    background: darken($color: #E5A56F, $amount: 10);
+  }
 }
 </style>
