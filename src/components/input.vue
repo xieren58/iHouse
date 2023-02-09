@@ -1,5 +1,5 @@
 <template>
-  <div class="title">房屋属性：</div>
+  <div class="title">房屋属性1：</div>
   <div class="tags" :class="form.isNew ? 'disabled-old' : 'disabled-new'">
     <div class="tag only-new" :class="{ active: form.isNew }" @click="onTagClk('isNew')">{{ DICT.isNew }}</div>
     <div class="split"></div>

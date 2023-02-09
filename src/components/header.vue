@@ -27,10 +27,10 @@
 
     <div class="loan">
       <div>
-        商贷利率: <strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong>（总额 <span class="">{{ house?.businessLoan.amount || 0 }}</span> 万 年限 <span class="">{{ house?.businessLoan.years || 0 }}</span> 年）
+        商贷利率: <strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong>（总额 <span class="">{{ house?.businessLoan.amount || 0 }}</span>万｜年限 <span class="">{{ house?.businessLoan.years || 0 }}</span>年）
       </div>
       <div>
-        公积金利率: <strong>{{ House.f2S(form.providentFundLoanRate * 100) }}%｜基准利率</strong>（总额 <span class="">{{ house?.providentFundLoan.amount || 0 }}</span> 万 年限 <span class="alert">{{ house?.providentFundLoan.years || 0 }}</span> 年）
+        公积金利率: <strong>{{ House.f2S(form.providentFundLoanRate * 100) }}%｜基准利率</strong>（总额 <span class="">{{ house?.providentFundLoan.amount || 0 }}</span>万｜年限 <span class="alert">{{ house?.providentFundLoan.years || 0 }}</span>年）
       </div>
     </div>
   </header>
