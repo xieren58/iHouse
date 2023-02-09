@@ -8,7 +8,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
       },
       devOptions: {
         enabled: true,
@@ -20,14 +20,28 @@ export default defineConfig({
         start_url: ".",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "/icons/maskable_icon_x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "any",
           },
           {
-            src: "pwa-512x512.png",
+            src: "/icons/maskable_icon_x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "maskable",
+          },
+          {
+            src: "/icons/maskable_icon_x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icons/maskable_icon_x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
         //导航界面的背景颜色
@@ -36,7 +50,7 @@ export default defineConfig({
         theme_color: "#444C60",
         //页面显示效果为没有地址栏和底部状态栏
         display: "standalone",
-      }
+      },
     }),
   ],
   build: {
