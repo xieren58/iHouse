@@ -1,17 +1,14 @@
 <template>
   <div class="title">房屋属性：</div>
-  <div class="tags">
-    <div class="tag" :class="{ active: form.isNew }" @click="onTagClk('isNew')">{{ DICT.isNew }}</div>
+  <div class="tags" :class="form.isNew ? 'disabled-old' : 'disabled-new'">
+    <div class="tag only-new" :class="{ active: form.isNew }" @click="onTagClk('isNew')">{{ DICT.isNew }}</div>
     <div class="split"></div>
-    <div class="tag" :class="{ active: form.isFive }" @click="onTagClk('isFive')">{{ DICT.isFive }}</div>
-    <div class="tag" :class="{ active: form.isOnly }" @click="onTagClk('isOnly')">{{ DICT.isOnly }}</div>
-    <div class="tag" :class="{ active: form.isRelocation }" @click="onTagClk('isRelocation')">{{ DICT.isRelocation }}
-    </div>
-    <div class="tag" :class="{ active: form.isFirstRelocation }" @click="onTagClk('isFirstRelocation')">{{
-      DICT.isFirstRelocation
-    }}</div>
+    <div class="tag only-old" :class="{ active: form.isFive }" @click="onTagClk('isFive')">{{ DICT.isFive }}</div>
+    <div class="tag only-old" :class="{ active: form.isOnly }" @click="onTagClk('isOnly')">{{ DICT.isOnly }}</div>
+    <div class="tag only-old" :class="{ active: form.isFirstRelocation || form.isRelocation }" @click="onTagClk('isRelocation')">{{ DICT.isRelocation }}</div>
+    <div class="tag only-old" :class="{ active: form.isFirstRelocation }" @click="onTagClk('isFirstRelocation')">{{ DICT.isFirstRelocation }}</div>
   </div>
-  <section class="numbers">
+  <section class="numbers" :class="{ 'disabled-old': form.isNew, 'disabled-first-relocation': form.isFirstRelocation }">
     <div class="row">
       <div class="item">
         <label for="price">{{ DICT.price }}</label>
@@ -20,46 +17,36 @@
           <div class="unit">万</div>
         </div>
       </div>
-      <div class="item">
+      <div class="item only-old only-second-relocation">
         <label for="originPrice">{{ DICT.originPrice }}</label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="originPrice" v-model="form.originPrice" />
           <div class="unit">万</div>
         </div>
       </div>
-      <div class="item">
-        <label for="verifyPrice">{{ DICT.verifyPrice }}</label>
+      <div class="item only-old">
+        <label for="verifyUnitPrice">{{ DICT.verifyUnitPrice }}</label>
         <div class="input-wrapper">
-          <input placeholder="0" type="text" id="verifyPrice" v-model="form.verifyPrice" />
+          <input placeholder="0" type="text" id="verifyUnitPrice" v-model="form.verifyUnitPrice" />
           <div class="unit">万</div>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="item item-area">
+      <div class="item item-area only-old">
         <label for="area">{{ DICT.area }}</label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="area" v-model="form.area" />
           <div class="unit unit-l">m²</div>
         </div>
       </div>
-      <div class="item">
+      <div class="item only-old">
         <label for="age">{{ DICT.age }}</label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="age" v-model="form.age" />
           <div class="unit unit">年</div>
         </div>
       </div>
-    </div>
-
-    <div class="loan">
-      <div><span>商贷利率: </span><strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong></div>
-      <div><span>公积金利率:</span><strong>{{
-        House.f2S(form.providentFundLoanRate *
-          100)
-      }}%｜基准利率</strong><span>（贷款年限</span><span class="alert">{{
-  house?.providentFundLoan.years || 0
-}}</span><span>年）</span></div>
     </div>
   </section>
 
@@ -76,6 +63,14 @@ import House, { DICT, IOptions } from "../utils/house"
 import { form, house, bus, BUS_EVENT } from "../utils/bus"
 
 watch(form, () => onSubmit(), { deep: true })
+watch(
+  () => form.value.isFirstRelocation,
+  (newVal) => newVal && (form.value.isRelocation = newVal)
+)
+watch(
+  () => form.value.isRelocation,
+  (newVal) => !newVal && (form.value.isFirstRelocation = newVal)
+)
 
 const onSubmit = () => bus.emit(BUS_EVENT.SUBMIT)
 
@@ -91,6 +86,36 @@ const onTagClk = (type: string) => {
   font-weight: 500;
   color: #939393;
   line-height: 52px;
+}
+
+@mixin disabled() {
+  opacity: 0.3;
+}
+
+.disabled-old {
+  .only-old {
+    @include disabled();
+
+    &.item {
+      pointer-events: none;
+    }
+  }
+}
+
+.disabled-first-relocation {
+  .only-second-relocation {
+    @include disabled();
+
+    &.item {
+      pointer-events: none;
+    }
+  }
+}
+
+.disabled-new {
+  .only-new {
+    @include disabled();
+  }
 }
 
 .tags {
@@ -142,6 +167,10 @@ const onTagClk = (type: string) => {
   width: 100%;
   margin-bottom: 40px;
 
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   .item {
     font-size: 0;
     margin-right: 27px;
@@ -185,7 +214,7 @@ const onTagClk = (type: string) => {
         line-height: 66px;
         text-align: center;
         padding: 0 50px 0 10px;
-        border: 2px solid #BFBCB8;
+        border: 2px solid #bfbcb8;
 
         &:focus {
           border-color: var(--color-primary);
@@ -204,38 +233,13 @@ const onTagClk = (type: string) => {
         font-weight: 600;
         color: #5c5c5c;
         line-height: 1;
+        pointer-events: none;
 
         &-l {
           font-size: 28px;
         }
       }
     }
-  }
-}
-
-.loan {
-  >div {
-    span {
-      font-size: 20px;
-      font-weight: 500;
-      color: #939393;
-      line-height: 1;
-    }
-
-    &:first-child {
-      margin-bottom: 6px;
-    }
-  }
-
-  strong {
-    font-size: 20px;
-    font-weight: 500;
-    color: #5c5c5c;
-    line-height: 1;
-  }
-
-  .alert {
-    color: var(--color-primary);
   }
 }
 
@@ -286,7 +290,7 @@ const onTagClk = (type: string) => {
   cursor: pointer;
 
   &:active {
-    background: darken($color: #E5A56F, $amount: 10);
+    background: darken($color: #e5a56f, $amount: 10);
   }
 }
 </style>

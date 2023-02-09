@@ -1,4 +1,4 @@
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { IStoreItem } from "../types/constant"
 import House, { DICT } from "./house"
 import mitt from "./mitt"
@@ -8,7 +8,7 @@ export const form = ref({
   name: "House",
   originPrice: 0,
   price: 512,
-  verifyPrice: 445,
+  verifyUnitPrice: 5.45,
   area: 81.59,
   isNew: false,
   isFive: true,

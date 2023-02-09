@@ -17,9 +17,20 @@
         <p class="board-title">
           房款{{ DICT.downPayment }} <span class="alert">{{ house?.downPayment || 0 }}</span> 万
         </p>
-        <p class="board-sub icon-wrapper">月供&nbsp;<span class="icon-tip">i</span></p>
+        <p class="board-sub icon-wrapper">月供
+          <!-- &nbsp;<span class="icon-tip">i</span> -->
+        </p>
         <p class="board-sub">等额本息 <span class="alert">{{ house?.getTotalLoan().wayOfPI || 0 }}</span>元</p>
         <p class="board-sub">等额本金 {{ house?.getTotalLoan().wayOfP || 0 }}元</p>
+      </div>
+    </div>
+
+    <div class="loan">
+      <div>
+        商贷利率: <strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong>（总额 <span class="">{{ house?.businessLoan.amount || 0 }}</span> 万 年限 <span class="">{{ house?.businessLoan.years || 0 }}</span> 年）
+      </div>
+      <div>
+        公积金利率: <strong>{{ House.f2S(form.providentFundLoanRate * 100) }}%｜基准利率</strong>（总额 <span class="">{{ house?.providentFundLoan.amount || 0 }}</span> 万 年限 <span class="alert">{{ house?.providentFundLoan.years || 0 }}</span> 年）
       </div>
     </div>
   </header>
@@ -27,7 +38,7 @@
 <script lang="ts" setup>
 import type { PropType } from "vue"
 import House, { DICT } from "../utils/house"
-import { house } from "../utils/bus"
+import { form, house } from "../utils/bus"
 
 const onHistoryClk = () => {
   // console.log(item)
@@ -69,7 +80,7 @@ const onHistoryClk = () => {
   }
 }
 .title {
-  padding-bottom: 27px;
+  padding-bottom: 28px;
   margin-bottom: 28px;
   font-size: 52px;
   font-weight: 500;
@@ -99,6 +110,31 @@ const onHistoryClk = () => {
     font-weight: 500;
     color: #bfbfbf;
     line-height: 28px;
+  }
+}
+
+.loan {
+  margin-top: 28px;
+  > div {
+    font-size: 20px;
+    font-weight: 500;
+    color: #bfbfbf;
+    line-height: 1;
+
+    &:first-child {
+      margin-bottom: 6px;
+    }
+  }
+
+  strong {
+    font-size: 20px;
+    font-weight: 500;
+    // color: #5c5c5c;
+    line-height: 1;
+  }
+
+  .alert {
+    color: var(--color-primary);
   }
 }
 </style>

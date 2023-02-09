@@ -2,7 +2,7 @@ export interface IOptions {
   name?: string
   originPrice: number
   price: number
-  verifyPrice: number
+  verifyUnitPrice: number
   area: number
   isNew: boolean
   isFive: boolean
@@ -84,7 +84,7 @@ export default class House {
     this.isNew = options.isNew
     this.originPrice = options.originPrice
     this.price = options.price
-    this.verifyPrice = this.isNew ? this.price : options.verifyPrice
+    this.verifyPrice = this.isNew ? this.price : options.verifyUnitPrice * options.area
     this.area = options.area
     this.isFive = !!options.isFive
     this.isOnly = !!options.isOnly
@@ -255,7 +255,7 @@ export enum DICT {
   name = "名称",
   originPrice = "买入价",
   price = "挂牌价",
-  verifyPrice = "核验价",
+  verifyUnitPrice = "核验单价",
   area = "面积",
   isNew = "新房",
   isFive = "满五",
@@ -271,11 +271,11 @@ export enum DICT {
   downPayment = "首付",
 }
 
-export const my = new House({
+const my = new House({
   name: "",
   originPrice: 0,
   price: 512,
-  verifyPrice: 445,
+  verifyUnitPrice: 5.45,
   area: 81.59,
   isNew: false,
   isFive: !!1,
