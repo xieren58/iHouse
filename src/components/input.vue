@@ -1,7 +1,7 @@
 <template>
   <div class="title">房屋属性：</div>
   <div class="tags">
-    <div class="tag" :class="{ active: 0 }">新房</div>
+    <div class="tag" :class="{ active: form.isNew }" @click="onTagClk('isNew')">{{ DICT.isNew }}</div>
     <div class="split"></div>
     <div class="tag" :class="{ active: form.isFive }" @click="onTagClk('isFive')">{{ DICT.isFive }}</div>
     <div class="tag" :class="{ active: form.isOnly }" @click="onTagClk('isOnly')">{{ DICT.isOnly }}</div>

@@ -10,6 +10,7 @@ export const form = ref({
   price: 512,
   verifyPrice: 445,
   area: 81.59,
+  isNew: false,
   isFive: true,
   isOnly: true,
   isRelocation: true,
