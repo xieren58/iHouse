@@ -1,35 +1,5 @@
-export interface IOptions {
-  name?: string
-  originPrice: number
-  price: number
-  verifyUnitPrice: number
-  area: number
-  isNew: boolean
-  isFive: boolean
-  isOnly: boolean
-  isRelocation: boolean
-  isFirstRelocation: boolean
-  age: number
-  businessLoanRate?: number
-  providentFundLoanRate?: number
-}
-
-interface ILoan {
-  amount: number // 贷款金额
-  years: number // 贷款年限
-  wayOfPI: {
-    // 等额本息还款方式
-    months: number[] // 月还款
-    interest: number // 总利息
-    total: number //总还款
-  }
-  wayOfP: {
-    // 等额本金还款方式
-    months: number[]
-    interest: number
-    total: number
-  }
-}
+import { ILoan, IHouseBaseInfo } from "../types/constant"
+import { uuid } from 'uuidv4';
 
 export default class House {
   VAT = 0 // 增值税
@@ -67,10 +37,12 @@ export default class House {
       total: 0,
     },
   }
+  uuid: string
   originPrice: number
   price: number
   verifyPrice: number
   area: number
+  isCollected: boolean
   isNew: boolean
   isFive: boolean
   isOnly: boolean
@@ -80,7 +52,9 @@ export default class House {
   businessLoanRate: number
   providentFundLoanRate: number
 
-  constructor(options: IOptions) {
+  constructor(options: IHouseBaseInfo) {
+    this.uuid = options.uuid
+    this.isCollected = !!options.isCollected
     this.isNew = options.isNew
     this.originPrice = options.originPrice
     this.price = options.price
@@ -93,7 +67,6 @@ export default class House {
     this.age = this.isNew ? 0 : new Date().getFullYear() - options.age
     this.businessLoanRate = options.businessLoanRate || 0.043
     this.providentFundLoanRate = options.providentFundLoanRate || 0.031
-
     this.init()
   }
 
@@ -271,19 +244,20 @@ export enum DICT {
   downPayment = "首付",
 }
 
-const my = new House({
-  name: "",
-  originPrice: 0,
-  price: 512,
-  verifyUnitPrice: 5.45,
-  area: 81.59,
-  isNew: false,
-  isFive: !!1,
-  isOnly: !!1,
-  isRelocation: !!1,
-  isFirstRelocation: !!1,
-  age: 2006,
-  providentFundLoanRate: 0,
-  businessLoanRate: 0,
-})
-my.log()
+// const my = new House({
+//   mark: "",
+//   originPrice: 0,
+//   price: 512,
+//   verifyUnitPrice: 5.45,
+//   area: 81.59,
+//   isNew: false,
+//   isCollected: false,
+//   isFive: !!1,
+//   isOnly: !!1,
+//   isRelocation: !!1,
+//   isFirstRelocation: !!1,
+//   age: 2006,
+//   providentFundLoanRate: 0,
+//   businessLoanRate: 0,
+// })
+// my.log()

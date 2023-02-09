@@ -1,5 +1,5 @@
 <template>
-  <div class="title">房屋属性1：</div>
+  <div class="title">房屋属性：</div>
   <div class="tags" :class="form.isNew ? 'disabled-old' : 'disabled-new'">
     <div class="tag only-new" :class="{ active: form.isNew }" @click="onTagClk('isNew')">{{ DICT.isNew }}</div>
     <div class="split"></div>
@@ -44,7 +44,7 @@
         <label for="age">{{ DICT.age }}</label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="age" v-model="form.age" />
-          <div class="unit unit">年</div>
+          <div class="unit">年</div>
         </div>
       </div>
     </div>
@@ -52,14 +52,14 @@
 
   <section class="mark">
     <label for="name">备注：</label>
-    <input placeholder="（小区、楼层）" type="text" id="name" v-model="form.name" />
+    <input placeholder="（小区、楼层）" type="text" id="name" v-model="form.uuid" />
   </section>
 
   <div class="btn" @click="onSubmit">计算</div>
 </template>
 <script lang="ts" setup>
 import { PropType, watch } from "vue"
-import House, { DICT, IOptions } from "../utils/house"
+import House, { DICT } from "../utils/house"
 import { form, house, bus, BUS_EVENT } from "../utils/bus"
 
 watch(form, () => onSubmit(), { deep: true })

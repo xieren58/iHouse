@@ -3,7 +3,10 @@
     <h1 class="title">
       {{ DICT.downPayment }}含税共 <span class="alert">{{ house?.getTaxWithDownPayment() || 0 }}</span> 万
     </h1>
-    <figure class="icon-history" @click="onHistoryClk"></figure>
+    <figure :class="form.isCollected ? 'icon-collected' : 'icon-unCollected'" @click="onCollectClk"></figure>
+    <div class="history" @click="onHistoryClk">
+      <figure class="icon-history"></figure>
+    </div>
     <div class="board">
       <div class="board-item">
         <p class="board-title">
@@ -17,20 +20,28 @@
         <p class="board-title">
           房款{{ DICT.downPayment }} <span class="alert">{{ house?.downPayment || 0 }}</span> 万
         </p>
-        <p class="board-sub icon-wrapper">月供
+        <p class="board-sub icon-wrapper">
+          月供
           <!-- &nbsp;<span class="icon-tip">i</span> -->
         </p>
-        <p class="board-sub">等额本息 <span class="alert">{{ house?.getTotalLoan().wayOfPI || 0 }}</span>元</p>
+        <p class="board-sub">
+          等额本息 <span class="alert">{{ house?.getTotalLoan().wayOfPI || 0 }}</span
+          >元
+        </p>
         <p class="board-sub">等额本金 {{ house?.getTotalLoan().wayOfP || 0 }}元</p>
       </div>
     </div>
 
     <div class="loan">
       <div>
-        商贷利率: <strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong>（总额 <span class="">{{ house?.businessLoan.amount || 0 }}</span>万｜年限 <span class="">{{ house?.businessLoan.years || 0 }}</span>年）
+        商贷利率: <strong>{{ House.f2S(form.businessLoanRate * 100) }}%｜标准利率</strong>（总额 <span class="">{{ house?.businessLoan.amount || 0 }}</span
+        >万｜年限 <span class="">{{ house?.businessLoan.years || 0 }}</span
+        >年）
       </div>
       <div>
-        公积金利率: <strong>{{ House.f2S(form.providentFundLoanRate * 100) }}%｜基准利率</strong>（总额 <span class="">{{ house?.providentFundLoan.amount || 0 }}</span>万｜年限 <span class="alert">{{ house?.providentFundLoan.years || 0 }}</span>年）
+        公积金利率: <strong>{{ House.f2S(form.providentFundLoanRate * 100) }}%｜基准利率</strong>（总额 <span class="">{{ house?.providentFundLoan.amount || 0 }}</span
+        >万｜年限 <span class="alert">{{ house?.providentFundLoan.years || 0 }}</span
+        >年）
       </div>
     </div>
   </header>
@@ -38,12 +49,29 @@
 <script lang="ts" setup>
 import type { PropType } from "vue"
 import House, { DICT } from "../utils/house"
-import { form, house } from "../utils/bus"
+import { bus, BUS_EVENT, form, house } from "../utils/bus"
+import { IEventBusParam, IHouseBaseInfo, IHouseFullInfo } from "../types/constant"
 
 const onHistoryClk = () => {
   // console.log(item)
   // form.value = item.val.value
   // submit()
+  bus.emit(BUS_EVENT.HISTORY_INIT)
+  bus.emit(BUS_EVENT.HISTORY_SHOW)
+}
+
+const onCollectClk = () => {
+  form.value.isCollected = !form.value.isCollected
+  form.value.isCollected
+    ? bus.emit(BUS_EVENT.COLLECT, {
+        uuid: form.value.uuid!,
+        val: contactData(form.value)
+      } as IEventBusParam)
+    : bus.emit(BUS_EVENT.UN_COLLECT, form.value.uuid!)
+}
+
+const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
+  return { ...val, unitPrice: "1", taxWithDownPayment: house.value?.getTaxWithDownPayment() || "", tax: house.value?.getTax() || "", totalLoan: house.value?.getTotalLoan() || { amount: "", wayOfP: "", wayOfPI: "" } }
 }
 </script>
 <style lang="scss" scoped>
@@ -51,6 +79,19 @@ const onHistoryClk = () => {
   position: relative;
   padding: 70px 52px 53px;
 }
+
+.history {
+  position: absolute;
+  right: -86px;
+  top: 65px;
+  z-index: 10;
+  width: 86*2px;
+  height: 62px;
+  background: var(--color-primary);
+  border-radius: 31px;
+  padding: 7px 0 7px 7px;
+}
+
 .icon {
   &-wrapper {
     display: flex;
@@ -58,12 +99,25 @@ const onHistoryClk = () => {
   }
 
   &-history {
+    width: 48px;
+    height: 48px;
+    background: url(../assets/history.png) no-repeat center / 48px 48px;
+  }
+  &-collected {
     position: absolute;
-    top: 67px;
-    right: 49px;
-    width: 55px;
-    height: 55px;
-    background: url(../assets/history.png) no-repeat center / 55px 55px;
+    top: 72px;
+    right: 101px;
+    width: 50px;
+    height: 47px;
+    background: url(../assets/collect.png) no-repeat center / 50px 47px;
+  }
+  &-unCollected {
+    position: absolute;
+    top: 72px;
+    right: 101px;
+    width: 50px;
+    height: 47px;
+    background: url(../assets/unCollect.png) no-repeat center / 50px 47px;
   }
   &-tip {
     display: flex;

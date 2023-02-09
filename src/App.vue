@@ -2,10 +2,11 @@
 import { onMounted, ref } from "vue"
 import IHeader from "./components/header.vue"
 import IInput from "./components/input.vue"
+import IHistory from "./components/history.vue"
 import House, { DICT } from "./utils/house"
 import store from "./utils/store"
 import { BUS_EVENT, bus, form, house } from './utils/bus'
-
+const showHistory = ref(false)
 // const history = ref<IStoreItem[]>([])
 
 // const getAll = () => {
@@ -16,65 +17,29 @@ import { BUS_EVENT, bus, form, house } from './utils/bus'
 //   store.clear()
 //   getAll()
 // }
+bus.on(BUS_EVENT.HISTORY_SHOW, () => {
+  showHistory.value = !showHistory.value
+})
 
 onMounted(() => {
   bus.emit(BUS_EVENT.SUBMIT)
-  bus.emit(BUS_EVENT.HISTORY_UPDATE)
+  // bus.emit(BUS_EVENT.HISTORY_UPDATE)
 })
 </script>
 
 <template>
-  <div class="layout">
+  <div class="layout" :class="{ active: showHistory }">
     <i-header></i-header>
     <main class="main">
       <i-input></i-input>
     </main>
+    <i-history></i-history>
   </div>
-
-  <!-- <div class="layout">
-    <h1>输入</h1>
-    <div>
-      <label>{{ DICT.name }}</label>
-      <input type="text" v-model="form.name" />
-    </div>
-    <div>
-      <label>{{ DICT.originPrice }} </label>
-      <input type="text" v-model="form.originPrice" />
-    </div>
-    <div>
-      <label>{{ DICT.price }} </label>
-      <input type="text" v-model="form.price" />
-    </div>
-    <div>
-      <label>{{ DICT.verifyPrice }} </label>
-      <input type="text" v-model="form.verifyPrice" />
-    </div>
-    <div><label>{{ DICT.area }} </label> <input type="text" v-model="form.area" /></div>
-    <div><label>{{ DICT.isFive }} </label> <input type="checkbox" v-model="form.isFive" /></div>
-    <div><label>{{ DICT.isOnly }} </label> <input type="checkbox" v-model="form.isOnly" /></div>
-    <div><label>{{ DICT.isRelocation }} </label> <input type="checkbox" v-model="form.isRelocation" /></div>
-    <div><label>{{ DICT.isFirstRelocation }}  </label> <input type="checkbox" v-model="form.isFirstRelocation" /></div>
-    <div><label>{{ DICT.age }}  </label> <input type="text" v-model="form.age" /></div>
-    <div><label>{{ DICT.businessLoanRate }}  </label> <input type="text" v-model="form.businessLoanRate" /></div>
-    <div><label>{{ DICT.providentFundLoanRate }}  </label> <input type="text" v-model="form.providentFundLoanRate" /></div>
-    <button @click="submit">计算</button>
-    <button @click="clearAll">清空记录</button>
-    <h1>输出</h1>
-    <div id="output"></div>
-    <h1>历史</h1>
-    <table>
-      <th>名称</th>
-      <th>信息</th>
-      <tr v-for="item in history" @click="onHistoryClk(item)">
-        <td>{{ item.key }}</td>
-        <td>{{ item.val.display }}</td>
-      </tr>
-    </table>
-  </div> -->
 </template>
 
 <style scoped lang="scss">
 .layout {
+  position: relative;
   width: 750px;
   min-height: 100%;
   display: flex;
@@ -82,6 +47,11 @@ onMounted(() => {
   background: #444C60;
   text-align: left;
   margin: 0 auto;
+  transition: all .3s;
+
+  &.active {
+    transform: translate3d(-100vw, 0, 0);
+  }
 }
 
 .main {
