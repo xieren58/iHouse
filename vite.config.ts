@@ -17,28 +17,28 @@ export default defineConfig({
         name: "买房计算器",
         short_name: "iHouse",
         description: "买房计算器",
-        start_url: ".",
+        start_url: "./",
         icons: [
           {
-            src: "/icons/maskable_icon_x192.png",
+            src: "/icons/pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
             purpose: "any",
           },
           {
-            src: "/icons/maskable_icon_x192.png",
+            src: "/icons/pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
             purpose: "maskable",
           },
           {
-            src: "/icons/maskable_icon_x512.png",
+            src: "/icons/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any",
           },
           {
-            src: "/icons/maskable_icon_x512.png",
+            src: "/icons/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "maskable",
