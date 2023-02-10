@@ -65,13 +65,19 @@ const onCollectClk = () => {
   form.value.isCollected
     ? bus.emit(BUS_EVENT.COLLECT, {
         uuid: form.value.uuid!,
-        val: contactData(form.value)
+        val: contactData(form.value),
       } as IEventBusParam)
     : bus.emit(BUS_EVENT.UN_COLLECT, form.value.uuid!)
 }
 
 const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
-  return { ...val, unitPrice: "1", taxWithDownPayment: house.value?.getTaxWithDownPayment() || "", tax: house.value?.getTax() || "", totalLoan: house.value?.getTotalLoan() || { amount: "", wayOfP: "", wayOfPI: "" } }
+  return {
+    ...val,
+    unitPrice: house.value?.getUnitPrice() || "",
+    taxWithDownPayment: house.value?.getTaxWithDownPayment() || "",
+    tax: house.value?.getTax() || "",
+    totalLoan: house.value?.getTotalLoan() || { amount: "", wayOfP: "", wayOfPI: "" },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -85,7 +91,7 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
   right: -86px;
   top: 65px;
   z-index: 10;
-  width: 86*2px;
+  width: 86 * 2px;
   height: 62px;
   background: var(--color-primary);
   border-radius: 31px;
@@ -143,10 +149,6 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
   border-bottom: 2px solid #d1d1d1;
 }
 
-.alert {
-  color: var(--color-primary) !important;
-}
-
 .board {
   display: flex;
   font-size: 26px;
@@ -185,10 +187,6 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
     font-weight: 500;
     // color: #5c5c5c;
     line-height: 1;
-  }
-
-  .alert {
-    color: var(--color-primary);
   }
 }
 </style>

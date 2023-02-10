@@ -116,6 +116,10 @@ export default class House {
     this.downPayment = House.f2N(this.price - this.verifyPrice * 0.65)
   }
 
+  getUnitPrice() {
+    return House.f2S(this.price / this.area * 10000)
+  }
+
   getTax() {
     return House.f2S(this.VAT + this.DT + this.PIT)
   }

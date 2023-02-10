@@ -10,7 +10,7 @@
       </div>
       <div class="tr-bottom">
         <div class="tr-bottom-left">{{ value?.uuid }}</div>
-        <div class="tr-bottom-right"><strong>63257</strong>元/m²</div>
+        <div class="tr-bottom-right"><strong>{{ parseInt(value?.unitPrice || "") }}</strong>元/m²</div>
       </div>
     </div>
   </div>
@@ -121,10 +121,6 @@ onMounted(() => {
       }
     }
   }
-}
-
-.alert {
-  color: var(--color-primary) !important;
 }
 
 .td {

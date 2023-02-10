@@ -34,7 +34,7 @@
     </div>
     <div class="row">
       <div class="item item-area only-old">
-        <label for="area">{{ DICT.area }}</label>
+        <label for="area">{{ DICT.area }}<span class="item-tip alert">{{ parseInt(house?.getUnitPrice() || "") }}</span><span class="item-tip">元/m²</span> </label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="area" v-model="form.area" />
           <div class="unit unit-l">m²</div>
@@ -194,6 +194,17 @@ const onTagClk = (type: string) => {
 
       &:focus {
         border-color: var(--color-primary);
+      }
+
+      .item-tip {
+        font-size: 20px;
+        font-weight: 600;
+        color: #939393;
+
+        &.alert {
+          margin-left: 16px;
+          margin-right: 4px;
+        }
       }
     }
 
