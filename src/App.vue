@@ -7,23 +7,13 @@ import House, { DICT } from "./utils/house"
 import store from "./utils/store"
 import { BUS_EVENT, bus, form, house } from './utils/bus'
 const showHistory = ref(false)
-// const history = ref<IStoreItem[]>([])
 
-// const getAll = () => {
-//   history.value = store.getAll()
-// }
-
-// const clearAll = () => {
-//   store.clear()
-//   getAll()
-// }
 bus.on(BUS_EVENT.HISTORY_SHOW, () => {
   showHistory.value = !showHistory.value
 })
 
 onMounted(() => {
   bus.emit(BUS_EVENT.SUBMIT)
-  // bus.emit(BUS_EVENT.HISTORY_UPDATE)
 })
 </script>
 
@@ -50,7 +40,7 @@ onMounted(() => {
   transition: all .3s;
 
   &.active {
-    transform: translate3d(-100vw, 0, 0);
+    transform: translate3d(-750px, 0, 0);
   }
 }
 
