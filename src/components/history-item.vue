@@ -1,6 +1,6 @@
 <template>
-  <div class="tr" :id="`tr-${value?.uuid}`">
-    <div class="tr-del">删除</div>
+  <div class="tr" :id="`tr-${value?.uuid}`" @click="">
+    <div class="tr-operation"><span class="tr-operation-left">编辑</span><span class="tr-operation-right">删除</span></div>
     <div class="tr-content">
       <div class="tr-top">
         <div class="td">{{ value?.price }}<span>万</span></div>
@@ -10,7 +10,10 @@
       </div>
       <div class="tr-bottom">
         <div class="tr-bottom-left">{{ value?.uuid }}</div>
-        <div class="tr-bottom-right"><strong>{{ parseInt(value?.unitPrice || "") }}</strong>元/m²</div>
+        <div class="tr-bottom-right">
+          <strong>{{ parseInt(value?.unitPrice || "") }}</strong
+          >元/m²
+        </div>
       </div>
     </div>
   </div>
@@ -20,17 +23,26 @@ import { onMounted, PropType } from "vue"
 import history from "../utils/history"
 import { IHouseFullInfo } from "../types/constant"
 import SwipeDelete from "../utils/swiper"
+import { bus, BUS_EVENT, form } from "../utils/bus";
 
 const props = defineProps({
   value: Object as PropType<IHouseFullInfo>,
 })
 let item: SwipeDelete | null
 
+const remove = () => {
+  item = null
+  if (props.value?.uuid) history.del(props.value.uuid)
+}
+
+const edit = () => {
+  item = null
+  if (props.value?.uuid) form.value = props.value
+  bus.emit(BUS_EVENT.HISTORY_SHOW)
+}
+
 onMounted(() => {
-  item = new SwipeDelete(props.value?.uuid || "", document.querySelector(`#tr-${props.value?.uuid}`)!, () => {
-    item = null
-    if (props.value?.uuid) history.del(props.value.uuid)
-  })
+  item = new SwipeDelete(document.querySelector(`#tr-${props.value?.uuid}`)!, remove, edit)
 })
 </script>
 <style lang="scss" scoped>
@@ -43,13 +55,13 @@ onMounted(() => {
   box-shadow: 0px 10px 21px 0px rgba(0, 0, 0, 0.15);
   border-radius: 32px;
 
-  &-del {
+  &-operation {
     position: absolute;
     text-align: right;
-    padding-right: 90px;
+    padding: 0 90px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     left: 0;
     top: 0;
     right: 0;
@@ -61,9 +73,22 @@ onMounted(() => {
     font-weight: 500;
     color: #e0e1e5;
 
-    &.active {
-      background-color: red;
+    &.red {
+      background-color: #f76260;
       color: #fff;
+
+      .tr-operation-left {
+        font-size: 0;
+      }
+    }
+
+    &.yellow {
+      background-color: #ffbe00;
+      color: #fff;
+
+      .tr-operation-right {
+        font-size: 0;
+      }
     }
   }
 

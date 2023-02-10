@@ -6,9 +6,9 @@ export default class SwipeDelete {
   private itemWidth: number
   private confirmWidth: number
   private contentDom: HTMLElement
-  private delDom: HTMLElement
+  private operationDom: HTMLElement
 
-  constructor(private uuid: string, private container: HTMLElement, private delFn: () => void) {
+  constructor(private container: HTMLElement, private rightFn: () => void, private leftFn: () => void) {
     this.startX = 0
     this.currentX = 0
     this.startY = 0
@@ -16,19 +16,29 @@ export default class SwipeDelete {
     this.itemWidth = container.getBoundingClientRect().width
     this.confirmWidth = this.itemWidth / 3
     this.contentDom = this.container.querySelector(".tr-content") as HTMLElement
-    this.delDom = this.container.querySelector(".tr-del") as HTMLElement
+    this.operationDom = this.container.querySelector(".tr-operation") as HTMLElement
     container.ontouchstart = this.handleTouchStart
     container.ontouchmove = this.handleTouchMove
     container.ontouchend = this.handleTouchEnd
   }
 
+  private isRightValid(deltaX: number) {
+    return -deltaX > this.confirmWidth
+  }
+
+  private isLeftValid(deltaX: number) {
+    return deltaX > this.confirmWidth
+  }
+
   private moveContainer = (deltaX: number) => {
-    if (deltaX > 0) deltaX = 0
     this.contentDom.style.transform = `translate3d(${deltaX}px, 0, 0)`
-    if (-deltaX > this.confirmWidth) {
-      this.delDom.classList.add("active")
+    if (this.isRightValid(deltaX)) {
+      this.operationDom.classList.add("red")
+    } else if (this.isLeftValid(deltaX)) {
+      this.operationDom.classList.add("yellow")
     } else {
-      this.delDom.classList.remove("active")
+      this.operationDom.classList.remove("red")
+      this.operationDom.classList.remove("yellow")
     }
   }
 
@@ -50,12 +60,18 @@ export default class SwipeDelete {
 
   private handleTouchEnd = (event: TouchEvent) => {
     const deltaX = this.currentX - this.startX
-    if (this.currentX !== 0 && -deltaX > this.confirmWidth) this.removeItem()
+    // click: event.touches[0].clientX: 0
+    if (this.currentX !== 0 && this.isRightValid(deltaX)) this.removeItem()
+    if (this.currentX !== 0 && this.isLeftValid(deltaX)) this.editItem()
     this.reset()
   }
 
   private removeItem = () => {
-    this.delFn()
+    this.rightFn()
+  }
+
+  private editItem = () => {
+    this.leftFn()
   }
 
   private reset = () => {
