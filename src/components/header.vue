@@ -3,9 +3,10 @@
     <h1 class="title">
       {{ DICT.downPayment }}含税共 <span class="alert">{{ house?.getTaxWithDownPayment() || 0 }}</span> 万
     </h1>
-    <figure :class="form.isCollected ? 'icon-collected' : 'icon-unCollected'" @click="onCollectClk"></figure>
+    <!-- <figure :class="form.isCollected ? 'icon-collected' : 'icon-unCollected'" @click="onCollectClk"></figure> -->
     <div class="history" @click="onHistoryClk">
       <figure class="icon-history"></figure>
+      <figure class="icon-back"></figure>
     </div>
     <div class="board">
       <div class="board-item">
@@ -53,31 +54,8 @@ import { bus, BUS_EVENT, form, house } from "../utils/bus"
 import { IEventBusParam, IHouseBaseInfo, IHouseFullInfo } from "../types/constant"
 
 const onHistoryClk = () => {
-  // console.log(item)
-  // form.value = item.val.value
-  // submit()
   bus.emit(BUS_EVENT.HISTORY_INIT)
   bus.emit(BUS_EVENT.HISTORY_SHOW)
-}
-
-const onCollectClk = () => {
-  form.value.isCollected = !form.value.isCollected
-  form.value.isCollected
-    ? bus.emit(BUS_EVENT.COLLECT, {
-        uuid: form.value.uuid!,
-        val: contactData(form.value),
-      } as IEventBusParam)
-    : bus.emit(BUS_EVENT.UN_COLLECT, form.value.uuid!)
-}
-
-const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
-  return {
-    ...val,
-    unitPrice: house.value?.getUnitPrice() || "",
-    taxWithDownPayment: house.value?.getTaxWithDownPayment() || "",
-    tax: house.value?.getTax() || "",
-    totalLoan: house.value?.getTotalLoan() || { amount: "", wayOfP: "", wayOfPI: "" },
-  }
 }
 </script>
 <style lang="scss" scoped>
@@ -89,7 +67,10 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
 .history {
   position: absolute;
   right: -86px;
-  top: 65px;
+  top: 1168px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   z-index: 10;
   width: 86 * 2px;
   height: 62px;
@@ -108,6 +89,12 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
     width: 48px;
     height: 48px;
     background: url(../assets/history.png) no-repeat center / 48px 48px;
+  }
+  &-back {
+    margin-right: 20px;
+    width: 23px;
+    height: 42px;
+    background: url(../assets/back.png) no-repeat center / 23px 42px;
   }
   &-collected {
     position: absolute;

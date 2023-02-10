@@ -50,7 +50,7 @@ export default class SwipeDelete {
 
   private handleTouchEnd = (event: TouchEvent) => {
     const deltaX = this.currentX - this.startX
-    if (-deltaX > this.confirmWidth) this.removeItem()
+    if (this.currentX !== 0 && -deltaX > this.confirmWidth) this.removeItem()
     this.reset()
   }
 

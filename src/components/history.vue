@@ -3,7 +3,7 @@
     <div class="th-wrapper">
       <div class="th">总价</div>
       <div class="th">面积</div>
-      <div class="th">首付（含税）</div>
+      <div class="th">首付(含税)</div>
       <div class="th">月供</div>
     </div>
     <history-item v-for="(value) in list" :value="value"></history-item>

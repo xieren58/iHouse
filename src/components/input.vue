@@ -51,16 +51,17 @@
   </section>
 
   <section class="mark">
-    <label for="name">备注：</label>
+    <label for="name">ID：</label>
     <input placeholder="（小区、楼层）" type="text" id="name" v-model="form.uuid" />
   </section>
 
-  <div class="btn" @click="onSubmit">计算</div>
+  <div class="btn" :class="{ active: isSaved }" @click="onCollect">{{ isSaved ? "✓" : "保存" }}</div>
 </template>
 <script lang="ts" setup>
-import { PropType, watch } from "vue"
+import { PropType, ref, watch } from "vue"
 import House, { DICT } from "../utils/house"
 import { form, house, bus, BUS_EVENT } from "../utils/bus"
+import { IEventBusParam, IHouseBaseInfo, IHouseFullInfo } from "../types/constant";
 
 watch(form, () => onSubmit(), { deep: true })
 watch(
@@ -72,11 +73,35 @@ watch(
   (newVal) => !newVal && (form.value.isFirstRelocation = newVal)
 )
 
+const isSaved = ref(false)
+
 const onSubmit = () => bus.emit(BUS_EVENT.SUBMIT)
 
 const onTagClk = (type: string) => {
   // @ts-ignore
   form.value[type] = !form.value[type]
+}
+
+const onCollect = () => {
+  // form.value.isCollected = !form.value.isCollected
+  // form.value.isCollected
+  bus.emit(BUS_EVENT.COLLECT, {
+    uuid: form.value.uuid!,
+    val: contactData(form.value),
+  } as IEventBusParam)
+  isSaved.value = true
+  setTimeout(() => isSaved.value = false, 800)
+    // : bus.emit(BUS_EVENT.UN_COLLECT, form.value.uuid!)
+}
+
+const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
+  return {
+    ...val,
+    unitPrice: house.value?.getUnitPrice() || "",
+    taxWithDownPayment: house.value?.getTaxWithDownPayment() || "",
+    tax: house.value?.getTax() || "",
+    totalLoan: house.value?.getTotalLoan() || { amount: "", wayOfP: "", wayOfPI: "" },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -299,9 +324,14 @@ const onTagClk = (type: string) => {
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
+  transition: all .3s;
 
   &:active {
     background: darken($color: #e5a56f, $amount: 10);
+  }
+
+  &.active {
+    background: #1AAD19;
   }
 }
 </style>
