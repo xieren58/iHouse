@@ -16,9 +16,11 @@ body {
 }
 
 #app {
+  width: 750px;
   height: 100%;
   font-size: 0;
   overflow: hidden;
+  margin: 0 auto;
 }
 
 article,
