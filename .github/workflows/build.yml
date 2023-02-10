@@ -1,6 +1,17 @@
 name: Node CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '.vscode/**'
+      - '.github/**'
+      - '.gitignore'
+      - '.prettierrc.json'
+      - '.prettierrc.json'
+      - 'README.md'
 
 jobs:
   build:
