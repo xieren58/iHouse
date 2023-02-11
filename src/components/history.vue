@@ -7,7 +7,8 @@
       <div class="th">月供</div>
     </div>
     <history-item v-for="(value) in list" :value="value"></history-item>
-    <div class="tip">* 左滑编辑，右滑删除</div>
+    <div class="tip" v-if="list.length">* 左滑编辑，右滑删除</div>
+    <div class="empty" v-if="!list.length">* 点击保存即可出现在历史记录中</div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -79,11 +80,15 @@ const list = history.list
   }
 }
 
-.tip {
-  margin-top: 40px;
-  color: #bfbfbf; 
+.tip, .empty {
+  margin: 40px 0;
+  color: #bfbfbf;
   font-size: 24px;
   font-weight: 500;
   text-align: center;
+}
+
+.empty {
+  margin-top: 400px;
 }
 </style>

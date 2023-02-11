@@ -27,4 +27,4 @@ export enum BUS_EVENT {
   HISTORY_SHOW = "HISTORY_SHOW"
 }
 
-export const STORE_HOUSE = "STORE_HOUSE"
+export const STORE_HOUSE = "I_STORE_HOUSE"

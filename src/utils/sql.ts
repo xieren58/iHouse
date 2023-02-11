@@ -1,6 +1,6 @@
 import { Ref, ref } from "vue"
 import { IHouseFullInfo } from "../types/constant"
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid"
 
 class SQL {
   list: Ref<IHouseFullInfo[]>

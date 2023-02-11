@@ -140,8 +140,8 @@ onMounted(() => {
 
     &-right {
       padding-left: 15px;
+      padding-right: 15px;
       flex-shrink: 0;
-      flex-basis: 230px;
       strong {
         color: #5c5c5c;
       }

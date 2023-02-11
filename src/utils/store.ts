@@ -1,6 +1,3 @@
-/**
- * 自定义存储器，基于 LocalStorage
- */
 export default {
   get(key: string) {
     const value = parse(localStorage.getItem(key) || "null")

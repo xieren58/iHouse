@@ -7,6 +7,7 @@ export default class SwipeDelete {
   private confirmWidth: number
   private contentDom: HTMLElement
   private operationDom: HTMLElement
+  private mouseLock = true
 
   constructor(private container: HTMLElement, private rightFn: () => void, private leftFn: () => void) {
     this.startX = 0
@@ -20,6 +21,10 @@ export default class SwipeDelete {
     container.ontouchstart = this.handleTouchStart
     container.ontouchmove = this.handleTouchMove
     container.ontouchend = this.handleTouchEnd
+
+    container.onmousedown = this.handleMouseDown
+    container.onmousemove = this.handleMouseMove
+    container.onmouseup = this.handleMouseUp
   }
 
   private isRightValid(deltaX: number) {
@@ -40,6 +45,33 @@ export default class SwipeDelete {
       this.operationDom.classList.remove("red")
       this.operationDom.classList.remove("yellow")
     }
+  }
+
+  private handleMouseDown = (event: MouseEvent) => {
+    this.mouseLock = false
+    this.startX = event.clientX
+    this.startY = event.clientY
+  }
+
+  private handleMouseMove = (event: MouseEvent) => {
+    if (this.mouseLock) return
+    this.currentX = event.clientX
+    this.currentY = event.clientY
+    const deltaX = this.currentX - this.startX
+    const deltaY = this.currentY - this.startY
+    this.moveContainer(deltaX)
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (event.cancelable) event.preventDefault()
+    }
+  }
+
+  private handleMouseUp = (event: MouseEvent) => {
+    this.mouseLock = true
+    const deltaX = this.currentX - this.startX
+    // click: event.clientX: 0
+    if (this.currentX !== 0 && this.isRightValid(deltaX)) this.removeItem()
+    if (this.currentX !== 0 && this.isLeftValid(deltaX)) this.editItem()
+    this.reset()
   }
 
   private handleTouchStart = (event: TouchEvent) => {
