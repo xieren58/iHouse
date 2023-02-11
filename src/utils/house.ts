@@ -42,7 +42,6 @@ export default class House {
   verifyUnitPrice: number
   verifyPrice: number
   area: number
-  isCollected: boolean
   isNew: boolean
   isFive: boolean
   isOnly: boolean
@@ -54,7 +53,6 @@ export default class House {
 
   constructor(options: IHouseBaseInfo) {
     this.id = options.id
-    this.isCollected = !!options.isCollected
     this.isNew = options.isNew
     this.originPrice = options.originPrice
     this.price = options.price

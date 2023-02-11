@@ -3,7 +3,6 @@
     <h1 class="title">
       {{ DICT.downPayment }}含税共 <span class="alert">{{ house?.getTaxWithDownPayment() || 0 }}</span> 万
     </h1>
-    <!-- <figure :class="form.isCollected ? 'icon-collected' : 'icon-unCollected'" @click="onCollectClk"></figure> -->
     <div class="history" @click="onHistoryClk">
       <figure class="icon-history"></figure>
       <figure class="icon-back"></figure>
@@ -95,22 +94,6 @@ const onHistoryClk = () => {
     width: 23px;
     height: 42px;
     background: url(../assets/back.png) no-repeat center / 23px 42px;
-  }
-  &-collected {
-    position: absolute;
-    top: 72px;
-    right: 101px;
-    width: 50px;
-    height: 47px;
-    background: url(../assets/collect.png) no-repeat center / 50px 47px;
-  }
-  &-unCollected {
-    position: absolute;
-    top: 72px;
-    right: 101px;
-    width: 50px;
-    height: 47px;
-    background: url(../assets/unCollect.png) no-repeat center / 50px 47px;
   }
   &-tip {
     display: flex;

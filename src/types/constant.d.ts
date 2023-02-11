@@ -10,7 +10,6 @@ export interface IHouseBaseInfo {
   price: number
   verifyUnitPrice: number
   area: number
-  isCollected?: boolean
   isNew: boolean
   isFive: boolean
   isOnly: boolean
