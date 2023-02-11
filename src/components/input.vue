@@ -28,8 +28,8 @@
         <label for="verifyUnitPrice">{{ DICT.verifyUnitPrice }}
           <abbr v-if="house && !!+(house.getUnitPriceDiscount())">
             <span class="item-tip alert">{{ house?.getUnitPriceDiscount() }}</span>
+            <span class="item-tip">折</span>
           </abbr>
-          <span class="item-tip">折</span>
         </label>
         <div class="input-wrapper">
           <input placeholder="0" type="text" id="verifyUnitPrice" v-model="form.verifyUnitPrice" />
@@ -41,7 +41,7 @@
       <div class="item item-area only-old">
         <label for="area">{{ DICT.area }}
           <abbr>
-            <span class="item-tip alert">{{ parseInt(house?.getUnitPrice() || "") }}</span><span class="item-tip">元/m²</span>
+            <span class="item-tip alert">{{ parseInt(house?.getUnitPrice() || "0") }}</span><span class="item-tip">元/m²</span>
           </abbr>
         </label>
         <div class="input-wrapper">
@@ -339,6 +339,10 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
 
   &.active {
     background: #1AAD19;
+  }
+
+  &.error {
+    background: #f76260;
   }
 }
 </style>

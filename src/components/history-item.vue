@@ -5,13 +5,13 @@
       <div class="tr-top">
         <div class="td">{{ value?.price }}<span>万</span></div>
         <div class="td">{{ value?.area }}<span>m²</span></div>
-        <div class="td alert">{{ parseInt(value?.taxWithDownPayment || "") }}({{ parseInt(value?.tax || "") }})<span>万</span></div>
-        <div class="td">{{ parseInt(value?.totalLoan.wayOfPI || "") }}<span>元</span></div>
+        <div class="td alert">{{ parseInt(value?.taxWithDownPayment || "0") }}({{ parseInt(value?.tax || "0") }})<span>万</span></div>
+        <div class="td">{{ parseInt(value?.totalLoan.wayOfPI || "0") }}<span>元</span></div>
       </div>
       <div class="tr-bottom">
         <div class="tr-bottom-left">{{ value?.id }}</div>
         <div class="tr-bottom-right">
-          <strong>{{ parseInt(value?.unitPrice || "") }}</strong
+          <strong>{{ parseInt(value?.unitPrice || "0") }}</strong
           >元/m²
         </div>
       </div>

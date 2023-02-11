@@ -7,18 +7,18 @@ import SQL from "./sql"
 import { BUS_EVENT, STORE_HOUSE } from "./dict"
 
 export const form = ref<IHouseBaseInfo>({
-  id: "21321323",
+  id: "",
   originPrice: 0,
-  price: 512,
-  verifyUnitPrice: 5.45,
-  area: 81.59,
+  price: 0,
+  verifyUnitPrice: 0,
+  area: 0,
   isNew: false,
   isCollected: false,
   isFive: true,
   isOnly: true,
   isRelocation: true,
   isFirstRelocation: true,
-  age: 2006,
+  age: 0,
   businessLoanRate: 0.043,
   providentFundLoanRate: 0.031,
 })

@@ -11,12 +11,12 @@ export default class House {
     years: 0,
 
     wayOfPI: {
-      months: [],
+      months: [0],
       interest: 0,
       total: 0,
     },
     wayOfP: {
-      months: [],
+      months: [0],
       interest: 0,
       total: 0,
     },
@@ -24,14 +24,14 @@ export default class House {
   // 商业贷款
   businessLoan: ILoan = {
     amount: 0,
-    years: 30,
+    years: 0,
     wayOfPI: {
-      months: [],
+      months: [0],
       interest: 0,
       total: 0,
     },
     wayOfP: {
-      months: [],
+      months: [0],
       interest: 0,
       total: 0,
     },
@@ -80,6 +80,7 @@ export default class House {
   }
 
   private init() {
+    if (!this.price) return
     if (!this.isNew) {
       this.getVAT()
       this.getDT()
@@ -122,7 +123,7 @@ export default class House {
   }
 
   getUnitPrice() {
-    return House.f2S(this.price / this.area * 10000)
+    return !+this.area ? 0 : House.f2S(this.price / this.area * 10000)
   }
 
   getTax() {
@@ -155,6 +156,7 @@ export default class House {
 
   private getBusinessLoan() {
     const loan = this.businessLoan
+    loan.years = 30
     loan.amount = House.f2N(this.verifyPrice * 0.65 - this.providentFundLoan.amount)
     loan.wayOfPI = this.getWayOfPI(loan.amount, this.businessLoanRate, loan.years)
     loan.wayOfP = this.getWayOfP(loan.amount, this.businessLoanRate, loan.years)
