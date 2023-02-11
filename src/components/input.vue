@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="item item-area only-old">
+      <div class="item item-area">
         <label for="area">{{ DICT.area }}
           <abbr>
             <span class="item-tip alert">{{ parseInt(house?.getUnitPrice() || "0") }}</span><span class="item-tip">元/m²</span>
