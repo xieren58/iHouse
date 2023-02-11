@@ -19,7 +19,8 @@ body {
   width: 750px;
   height: 100%;
   font-size: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   margin: 0 auto;
 }
 

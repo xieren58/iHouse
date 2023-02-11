@@ -322,7 +322,9 @@ const contactData = (val: IHouseBaseInfo): IHouseFullInfo => {
   justify-content: center;
   width: 400px;
   height: 80px;
-  margin: 0 auto 10px;
+  margin: 0 auto 32px;
+  margin-bottom: calc(constant(safe-area-inset-bottom) + 32px);
+  margin-bottom: calc(env(safe-area-inset-bottom) + 32px);
   background: var(--color-primary);
   border-radius: 56px;
   font-size: 38px;
