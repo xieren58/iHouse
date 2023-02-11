@@ -9,7 +9,7 @@
         <div class="td">{{ parseInt(value?.totalLoan.wayOfPI || "") }}<span>元</span></div>
       </div>
       <div class="tr-bottom">
-        <div class="tr-bottom-left">{{ value?.uuid }}</div>
+        <div class="tr-bottom-left">{{ value?.id }}</div>
         <div class="tr-bottom-right">
           <strong>{{ parseInt(value?.unitPrice || "") }}</strong
           >元/m²
@@ -20,10 +20,10 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, PropType } from "vue"
-import history from "../utils/history"
 import { IHouseFullInfo } from "../types/constant"
 import SwipeDelete from "../utils/swiper"
-import { bus, BUS_EVENT, form } from "../utils/bus";
+import { history, bus, form } from "../utils/bus";
+import { BUS_EVENT } from "../utils/dict";
 
 const props = defineProps({
   value: Object as PropType<IHouseFullInfo>,
@@ -32,7 +32,7 @@ let item: SwipeDelete | null
 
 const remove = () => {
   item = null
-  if (props.value?.uuid) history.del(props.value.uuid)
+  if (props.value?.uuid) history.del(props.value)
 }
 
 const edit = () => {
@@ -42,7 +42,8 @@ const edit = () => {
 }
 
 onMounted(() => {
-  item = new SwipeDelete(document.querySelector(`#tr-${props.value?.uuid}`)!, remove, edit)
+  const dom = document.querySelector(`#tr-${props.value?.uuid}`) as HTMLElement
+  if (dom) item = new SwipeDelete(dom, remove, edit)
 })
 </script>
 <style lang="scss" scoped>
@@ -83,7 +84,7 @@ onMounted(() => {
     }
 
     &.yellow {
-      background-color: #ffbe00;
+      background-color: var(--color-primary);
       color: #fff;
 
       .tr-operation-right {

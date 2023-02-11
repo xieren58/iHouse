@@ -9,10 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "uuidv4": "^6.2.13",
+    "uuid": "^9.0.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "amfe-flexible": "^2.2.1",
     "postcss-pxtorem": "^6.0.0",

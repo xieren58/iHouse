@@ -1,5 +1,4 @@
 import { ILoan, IHouseBaseInfo } from "../types/constant"
-import { uuid } from 'uuidv4';
 
 export default class House {
   VAT = 0 // 增值税
@@ -37,9 +36,10 @@ export default class House {
       total: 0,
     },
   }
-  uuid: string
+  id: string
   originPrice: number
   price: number
+  verifyUnitPrice: number
   verifyPrice: number
   area: number
   isCollected: boolean
@@ -53,11 +53,12 @@ export default class House {
   providentFundLoanRate: number
 
   constructor(options: IHouseBaseInfo) {
-    this.uuid = options.uuid
+    this.id = options.id
     this.isCollected = !!options.isCollected
     this.isNew = options.isNew
     this.originPrice = options.originPrice
     this.price = options.price
+    this.verifyUnitPrice = options.verifyUnitPrice
     this.verifyPrice = this.isNew ? this.price : options.verifyUnitPrice * options.area
     this.area = options.area
     this.isFive = !!options.isFive
@@ -114,6 +115,10 @@ export default class House {
 
   private getDownPayment() {
     this.downPayment = House.f2N(this.price - this.verifyPrice * 0.65)
+  }
+
+  getUnitPriceDiscount() {
+    return (this.verifyUnitPrice / (this.price / this.area) * 10).toFixed(1)
   }
 
   getUnitPrice() {
@@ -181,87 +186,49 @@ export default class House {
     }
   }
 
-  log() {
-    const tax = this.VAT + this.DT + this.PIT
-    const provident = this.providentFundLoan
-    const business = this.businessLoan
-    const { wayOfP: PP, wayOfPI: PPI } = provident
-    const { wayOfP: BP, wayOfPI: BPI } = business
-    const f = House.f2S
+  // log() {
+  //   const tax = this.VAT + this.DT + this.PIT
+  //   const provident = this.providentFundLoan
+  //   const business = this.businessLoan
+  //   const { wayOfP: PP, wayOfPI: PPI } = provident
+  //   const { wayOfP: BP, wayOfPI: BPI } = business
+  //   const f = House.f2S
 
-    // 房屋信息：
-    // ${DICT.originPrice}：${f(this.originPrice)}
-    // ${DICT.price}：${f(this.price)}
-    // ${DICT.verifyPrice}：${f(this.verifyPrice)}
-    // ${DICT.area}：${f(this.area)}
-    // ${DICT.isFive}：${+this.isFive}
-    // ${DICT.isOnly}：${+this.isOnly}
-    // ${DICT.isRelocation}：${+this.isRelocation}
-    // ${DICT.isFirstRelocation}：${+this.isFirstRelocation}
-    // ${DICT.age}：${new Date().getFullYear() - this.age}
-    // ${DICT.providentFundLoanRate}：${+this.providentFundLoanRate}
-    // ${DICT.businessLoanRate}：${+this.businessLoanRate}
-    const output = `
-  税费信息：
-    ${DICT.VAT}：${f(this.VAT)}
-    ${DICT.PIT}：${f(this.PIT)}
-    ${DICT.DT}：${f(this.DT)}
-    总税：${f(tax)}
+  //   // 房屋信息：
+  //   // ${DICT.originPrice}：${f(this.originPrice)}
+  //   // ${DICT.price}：${f(this.price)}
+  //   // ${DICT.verifyPrice}：${f(this.verifyPrice)}
+  //   // ${DICT.area}：${f(this.area)}
+  //   // ${DICT.isFive}：${+this.isFive}
+  //   // ${DICT.isOnly}：${+this.isOnly}
+  //   // ${DICT.isRelocation}：${+this.isRelocation}
+  //   // ${DICT.isFirstRelocation}：${+this.isFirstRelocation}
+  //   // ${DICT.age}：${new Date().getFullYear() - this.age}
+  //   // ${DICT.providentFundLoanRate}：${+this.providentFundLoanRate}
+  //   // ${DICT.businessLoanRate}：${+this.businessLoanRate}
+  //   const output = `
+  // 税费信息：
+  //   ${DICT.VAT}：${f(this.VAT)}
+  //   ${DICT.PIT}：${f(this.PIT)}
+  //   ${DICT.DT}：${f(this.DT)}
+  //   总税：${f(tax)}
 
-    ${DICT.downPayment}：${f(this.downPayment)}
-    首付+税：${f(this.downPayment + tax)}
+  //   ${DICT.downPayment}：${f(this.downPayment)}
+  //   首付+税：${f(this.downPayment + tax)}
 
-  贷款信息：
-    贷款总额：${f(provident.amount + business.amount)}
-    等额本息月还款：${f(PPI.months[0] + BPI.months[0])}，每月相同，总利息：${f(PPI.interest + BPI.interest)}，总还款额：${f(PPI.total + BPI.total)}
-    等额本金月还款：${f(PP.months[0] + BP.months[0])}，每月递减，总利息：${f(PP.interest + BP.interest)}，总还款额：${f(PP.total + BP.total)}
+  // 贷款信息：
+  //   贷款总额：${f(provident.amount + business.amount)}
+  //   等额本息月还款：${f(PPI.months[0] + BPI.months[0])}，每月相同，总利息：${f(PPI.interest + BPI.interest)}，总还款额：${f(PPI.total + BPI.total)}
+  //   等额本金月还款：${f(PP.months[0] + BP.months[0])}，每月递减，总利息：${f(PP.interest + BP.interest)}，总还款额：${f(PP.total + BP.total)}
 
-    公积金贷款总额：${f(provident.amount)}，年限：${provident.years}
-        等额本息月还款：${f(PPI.months[0])}，每月相同，总利息：${f(PPI.interest)}，总还款额：${f(PPI.total)}
-        等额本金月还款：${f(PP.months[0])}，每月递减，总利息：${f(PP.interest)}，总还款额：${f(PP.total)}
-    商贷总额：${f(business.amount)}，年限：${business.years}
-        等额本息月还款：${f(BPI.months[0])}，每月相同，总利息：${f(BPI.interest)}，总还款额：${f(BPI.total)}
-        等额本金月还款：${f(BP.months[0])}，每月递减，总利息：${f(BP.interest)}，总还款额：${f(BP.total)}
-    `
-    console.log(output)
-    return output
-  }
+  //   公积金贷款总额：${f(provident.amount)}，年限：${provident.years}
+  //       等额本息月还款：${f(PPI.months[0])}，每月相同，总利息：${f(PPI.interest)}，总还款额：${f(PPI.total)}
+  //       等额本金月还款：${f(PP.months[0])}，每月递减，总利息：${f(PP.interest)}，总还款额：${f(PP.total)}
+  //   商贷总额：${f(business.amount)}，年限：${business.years}
+  //       等额本息月还款：${f(BPI.months[0])}，每月相同，总利息：${f(BPI.interest)}，总还款额：${f(BPI.total)}
+  //       等额本金月还款：${f(BP.months[0])}，每月递减，总利息：${f(BP.interest)}，总还款额：${f(BP.total)}
+  //   `
+  //   console.log(output)
+  //   return output
+  // }
 }
-
-export enum DICT {
-  name = "名称",
-  originPrice = "买入价",
-  price = "挂牌价",
-  verifyUnitPrice = "核验单价",
-  area = "面积",
-  isNew = "新房",
-  isFive = "满五",
-  isOnly = "唯一",
-  isRelocation = "动迁",
-  isFirstRelocation = "一手",
-  age = "房屋年份",
-  businessLoanRate = "商贷利率",
-  providentFundLoanRate = "公积金利率",
-  VAT = "增值税",
-  PIT = "个税",
-  DT = "契税",
-  downPayment = "首付",
-}
-
-// const my = new House({
-//   mark: "",
-//   originPrice: 0,
-//   price: 512,
-//   verifyUnitPrice: 5.45,
-//   area: 81.59,
-//   isNew: false,
-//   isCollected: false,
-//   isFive: !!1,
-//   isOnly: !!1,
-//   isRelocation: !!1,
-//   isFirstRelocation: !!1,
-//   age: 2006,
-//   providentFundLoanRate: 0,
-//   businessLoanRate: 0,
-// })
-// my.log()

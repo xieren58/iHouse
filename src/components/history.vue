@@ -7,19 +7,14 @@
       <div class="th">月供</div>
     </div>
     <history-item v-for="(value) in list" :value="value"></history-item>
+    <div class="tip">* 左滑编辑，右滑删除</div>
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted } from "vue"
-import history from "../utils/history"
-import { bus, BUS_EVENT } from "../utils/bus"
+import { history } from "../utils/bus"
 import historyItem from "./history-item.vue"
 
 const list = history.list
-
-onMounted(() => {
-  bus.emit(BUS_EVENT.HISTORY_INIT)
-})
 </script>
 <style lang="scss">
 .table {
@@ -28,6 +23,9 @@ onMounted(() => {
   height: 100%;
   right: -100%;
   top: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-bottom: 100px;
   background-color: #e0e1e5;
   line-height: 1;
   padding-bottom: constant(safe-area-inset-bottom);
@@ -79,5 +77,13 @@ onMounted(() => {
   &::after {
     display: none;
   }
+}
+
+.tip {
+  margin-top: 40px;
+  color: #bfbfbf; 
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
 }
 </style>

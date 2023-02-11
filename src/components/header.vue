@@ -48,10 +48,9 @@
   </header>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue"
-import House, { DICT } from "../utils/house"
-import { bus, BUS_EVENT, form, house } from "../utils/bus"
-import { IEventBusParam, IHouseBaseInfo, IHouseFullInfo } from "../types/constant"
+import House from "../utils/house"
+import { bus, form, house } from "../utils/bus"
+import { BUS_EVENT, DICT } from "../utils/dict";
 
 const onHistoryClk = () => {
   bus.emit(BUS_EVENT.HISTORY_INIT)

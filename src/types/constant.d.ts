@@ -3,14 +3,9 @@ export interface IStoreItem {
   val: any
 }
 
-export interface IEventBusParam {
-  uuid: string
-  val: IHouseFullInfo
-}
-
 export interface IHouseBaseInfo {
-  uuid: string
-  // mark?: string
+  id: string
+  uuid?: string
   originPrice: number
   price: number
   verifyUnitPrice: number

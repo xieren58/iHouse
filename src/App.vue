@@ -3,9 +3,9 @@ import { onMounted, ref } from "vue"
 import IHeader from "./components/header.vue"
 import IInput from "./components/input.vue"
 import IHistory from "./components/history.vue"
-import House, { DICT } from "./utils/house"
-import store from "./utils/store"
-import { BUS_EVENT, bus, form, house } from './utils/bus'
+import { bus } from './utils/bus'
+import { BUS_EVENT } from "./utils/dict"
+
 const showHistory = ref(false)
 
 bus.on(BUS_EVENT.HISTORY_SHOW, () => {
