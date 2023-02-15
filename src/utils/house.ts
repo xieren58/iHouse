@@ -64,7 +64,7 @@ export default class House {
     this.isRelocation = !!options.isRelocation
     this.isFirstRelocation = !!options.isFirstRelocation
     this.age = this.isNew ? 0 : new Date().getFullYear() - options.age
-    this.businessLoanRate = options.businessLoanRate || 0.043
+    this.businessLoanRate = options.businessLoanRate || 0.0465
     this.providentFundLoanRate = options.providentFundLoanRate || 0.031
     this.init()
   }

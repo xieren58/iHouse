@@ -18,7 +18,7 @@ export const form = ref<IHouseBaseInfo>({
   isRelocation: false,
   isFirstRelocation: false,
   age: 2000,
-  businessLoanRate: 0.043,
+  businessLoanRate: 0.0465,
   providentFundLoanRate: 0.031,
 })
 
