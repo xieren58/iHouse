@@ -1,8 +1,3 @@
-export interface IStoreItem {
-  key: string
-  val: any
-}
-
 export interface IHouseBaseInfo {
   id: string
   uuid?: string
